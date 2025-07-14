@@ -1,0 +1,4 @@
+return {
+	"SalOrak/whaler",
+	opts = {},
+}
