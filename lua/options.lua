@@ -82,4 +82,15 @@ vim.o.scrolloff = 15
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Swift-specific indentation settings
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "swift",
+	callback = function()
+		vim.bo.tabstop = 2
+		vim.bo.softtabstop = 2
+		vim.bo.shiftwidth = 2
+		vim.bo.expandtab = true
+	end,
+})
+
 -- vim: ts=2 sts=2 sw=2 et

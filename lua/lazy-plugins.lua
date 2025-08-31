@@ -9,7 +9,13 @@
 --	:Lazy update
 --
 require("lazy").setup({
-	"NMAC427/guess-indent.nvim",
+	{
+		"NMAC427/guess-indent.nvim",
+		opts = {
+			-- Disable for Swift files to use global indentation settings
+			filetype_exclude = { "swift" },
+		},
+	},
 
 	require("themoros.plugins.colorschemes.xcode"),
 	--require("themoros.plugins.colorschemes.tokyonight"),
@@ -42,6 +48,7 @@ require("lazy").setup({
 	require("themoros.plugins.debug.xcodebuild"),
 	require("themoros.plugins.debug.dap"),
 	require("themoros.plugins.debug.dap-ui"),
+	require("themoros.plugins.lazygit"),
 })
 
 -- vim: ts=2 sts=2 sw=2 et
