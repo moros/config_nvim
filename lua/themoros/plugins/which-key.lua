@@ -59,50 +59,27 @@ return {
 
 			-- Register key groups using the modern add() method
 			wk.add({
-				-- Search group
-				{ "<leader>q", group = "[Q]uery" },
-				{ "<leader>qh", desc = "[Q]uery [H]elp" },
-				{ "<leader>qf", desc = "[Q]uery [F]iles" },
-				{ "<leader>qw", desc = "[Q]uery current [W]ord" },
-				{ "<leader>qg", desc = "[Q]uery [G]rep" },
-				{ "<leader>q/", desc = "[Q]uery [/] in Open Files" },
-				{ "<leader>qn", desc = "[Q]uery [N]eovim files" },
-				{ "<leader>qe", desc = "[Q]uery [E]xplorer (Whaler)" },
+				-- Direct actions
 				{ "<leader>/", desc = "[/] Fuzzily search in current buffer" },
-
-				-- Toggle group
-				{ "<leader>t", group = "[T]oggle" },
-				{ "<leader>ta", desc = "[T]ab [A]dd" },
-				{ "<leader>tc", desc = "[T]ab [C]lose" },
-				{ "<leader>to", desc = "[T]ab [O]nly" },
-				{ "<leader>tn", desc = "[T]ab [N]ext" },
-				{ "<leader>tp", desc = "[T]ab [P]revious" },
-				{ "<leader>tmp", desc = "[T]ab [M]ove [P]revious" },
-				{ "<leader>tmn", desc = "[T]ab [M]ove [N]ext" },
 				{ "<leader>u", desc = "[U]ndo tree" },
 
-				-- Format group
-				{ "<leader>f", group = "[F]ormat" },
-				{ "<leader>fr", desc = "[F]ind and [R]eplace" },
+				-- Search group
+				{ "<leader>s", group = "[S]earch" },
 
-				-- File operations group
-				{ "<leader>p", group = "[P]roject" },
-				{ "<leader>pv", desc = "[P]roject [V]iew" },
+				-- Tab group
+				{ "<leader>t", group = "[T]ab" },
 
-				-- Buffer operations group
-				{ "<leader>b", group = "[B]uffer" },
-
-				-- Window operations group
-				{ "<leader>w", group = "[W]indow" },
-
-				-- LSP group (for LSP-specific mappings)
-				{ "<leader>l", group = "[L]SP" },
-
-				-- Git group (if you add git mappings later)
+				-- Git group
 				{ "<leader>g", group = "[G]it" },
 
-				-- Quick actions group
-				--{ "<leader>q", group = "[Q]uick" },
+				-- LSP group
+				{ "<leader>l", group = "[L]SP" },
+
+				-- Replace group
+				{ "<leader>r", group = "[R]eplace" },
+
+				-- Project group
+				{ "<leader>p", group = "[P]roject" },
 			})
 		end,
 	},

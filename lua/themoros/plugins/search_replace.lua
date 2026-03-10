@@ -19,7 +19,7 @@ return {
 		})
 
 		-- Add keybinding to open SSR
-		vim.keymap.set({ "n", "x" }, "<leader>fr", function()
+		vim.keymap.set({ "n", "x" }, "<leader>rr", function()
 			require("ssr").open()
 		end, { desc = "Open structural search and replace" })
 	end,

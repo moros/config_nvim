@@ -84,15 +84,14 @@ return {
 
 			-- See `:help telescope.builtin`
 			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "<leader>qh", builtin.help_tags, { desc = "[Q]uery [H]elp" })
-			vim.keymap.set("n", "<leader>qf", builtin.find_files, { desc = "[Q]uery [F]iles" })
-			vim.keymap.set("n", "<leader>qw", builtin.grep_string, { desc = "[Q]uery current [W]ord" })
-			--vim.keymap.set("n", "<leader>qg", builtin.live_grep, { desc = "[Q]uery [G]rep" })
+			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
+			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
+			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			vim.keymap.set(
 				"n",
-				"<leader>qg",
+				"<leader>sg",
 				":lua require('telescope.builtin').live_grep({ additional_args = { '--fixed-strings' }})<CR>",
-				{ desc = "[Q]uery [G]rep" }
+				{ desc = "[S]earch [G]rep" }
 			)
 
 			--vim.keymap.set("n", "<leader>ps", function()
@@ -108,26 +107,34 @@ return {
 				}))
 			end, { desc = "[/] Fuzzily search in current buffer" })
 
+			-- Fuzzy search across all files in the current working directory
+			vim.keymap.set(
+				"n",
+				"<leader>.",
+				":lua require('telescope.builtin').live_grep({ additional_args = { '--fixed-strings' }})<CR>",
+				{ desc = "[.] Fuzzily search in current project" }
+			)
+
 			-- It's also possible to pass additional configuration options.
 			-- See `:help telescope.builtin.live_grep()` for information about particular keys.
-			vim.keymap.set("n", "<leader>q/", function()
+			vim.keymap.set("n", "<leader>s/", function()
 				builtin.live_grep({
 					grep_open_files = true,
 					prompt_title = "Live Grep in Open Files",
 				})
-			end, { desc = "[Q]uery [/] in Open Files" })
+			end, { desc = "[S]earch [/] in Open Files" })
 
 			-- Shortcut for searching your Neovim configuration files
-			vim.keymap.set("n", "<leader>qn", function()
+			vim.keymap.set("n", "<leader>sn", function()
 				builtin.find_files({ cwd = vim.fn.stdpath("config") })
-			end, { desc = "[Q]uery [N]eovim files" })
+			end, { desc = "[S]earch [N]eovim files" })
 
 			-- Whaler keymap
 			vim.keymap.set(
 				"n",
-				"<leader>qe",
+				"<leader>se",
 				require("telescope").extensions.whaler.whaler,
-				{ desc = "[Q]uery [E]xplorer (Whaler)" }
+				{ desc = "[S]earch [E]xplorer (Whaler)" }
 			)
 		end,
 	},
