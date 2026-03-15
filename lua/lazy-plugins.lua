@@ -48,6 +48,7 @@ require("lazy").setup({
 	require("themoros.plugins.debug.xcodebuild"),
 	require("themoros.plugins.debug.dap"),
 	require("themoros.plugins.debug.dap-ui"),
+	require("themoros.plugins.vim-tmux-navigator"),
 	require("themoros.plugins.lazygit"),
 })
 
