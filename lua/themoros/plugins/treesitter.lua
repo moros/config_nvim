@@ -6,7 +6,11 @@ return {
 
 		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 		opts = {
-			ensure_installed = {
+			-- Swift requires `tree-sitter generate` (tree-sitter CLI + Xcode tooling) and
+			-- is only used by the macOS-only xcodebuild plugin, so request it on macOS
+			-- only. This keeps Linux from invoking `generate` (which breaks against
+			-- tree-sitter CLI >= 0.25, where `--no-bindings` was removed).
+			ensure_installed = vim.list_extend({
 				"bash",
 				"c",
 				"diff",
@@ -18,8 +22,7 @@ return {
 				"query",
 				"vim",
 				"vimdoc",
-				"swift",
-			},
+			}, vim.fn.has("mac") == 1 and { "swift" } or {}),
 
 			-- Autoinstall languages that are not installed
 			auto_install = true,
