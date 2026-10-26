@@ -214,6 +214,12 @@ return {
 			-- So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
+			-- Broadcast blink.cmp's capabilities to every server. nvim-lspconfig ships
+			-- each server's base config under its `lsp/` runtime dir; vim.lsp.config()
+			-- layers our overrides on top (Neovim 0.11+ native API, replacing the
+			-- deprecated require('lspconfig') framework).
+			vim.lsp.config("*", { capabilities = capabilities })
+
 			-- Enable the following language servers
 			-- Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 			--
@@ -272,24 +278,25 @@ return {
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
-			require("mason-lspconfig").setup({
-				ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-				automatic_installation = false,
-				handlers = {
-					function(server_name)
-						local server = servers[server_name] or {}
+			-- Register per-server overrides. Each merges with the defaults shipped by
+			-- nvim-lspconfig (its `lsp/<name>.lua`) and the wildcard capabilities above.
+			for server_name, server in pairs(servers) do
+				vim.lsp.config(server_name, server)
+			end
 
-						-- This handles overriding only values explicitly passed
-						-- by the server configuration above. Useful when disabling
-						-- certain features of an LSP (for example, turning off formatting for ts_ls)
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
-					end,
-				},
+			-- Disable mason-lspconfig's blanket auto-enable: it tries to start *every*
+			-- installed mason package as an LSP, including formatters like stylua
+			-- (which then errors on the `--lsp` flag). Enable our servers explicitly.
+			require("mason-lspconfig").setup({
+				ensure_installed = {}, -- installs are handled by mason-tool-installer above
+				automatic_enable = false,
 			})
 
-			local lspconfig = require("lspconfig")
-			lspconfig.sourcekit.setup({
+			vim.lsp.enable(vim.tbl_keys(servers))
+
+			-- sourcekit (Swift / Objective-C) ships with Xcode rather than Mason, so
+			-- configure and enable it explicitly.
+			vim.lsp.config("sourcekit", {
 				cmd = {
 					--"/Applications/Xcode_16_2.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp",
 					--"/Applications/Xcode_16_3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp",
@@ -311,6 +318,7 @@ return {
 					},
 				},
 			})
+			vim.lsp.enable("sourcekit")
 		end,
 	},
 }

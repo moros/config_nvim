@@ -6,9 +6,11 @@ return {
 	},
 	config = function()
 		local xcodebuild = require("xcodebuild.integrations.dap")
-		local codelldbPath = "/usr/local/opt/codelldb-build-arm64/build/adapter/codelldb"
 
-		xcodebuild.setup(codelldbPath)
+		-- Xcode 16+ no longer needs codelldb; setup() now takes only an optional
+		-- boolean (loadBreakpoints, default true). If you ever need codelldb again,
+		-- enable `integrations.codelldb` in require("xcodebuild").setup{} instead.
+		xcodebuild.setup()
 		vim.keymap.set("n", "<leader>dd", xcodebuild.build_and_debug, { desc = "Build & Debug" })
 		vim.keymap.set("n", "<leader>dr", xcodebuild.debug_without_build, { desc = "Debug Without Building" })
 		vim.keymap.set("n", "<leader>dt", xcodebuild.debug_tests, { desc = "Debug Tests" })

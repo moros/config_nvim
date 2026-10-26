@@ -1,16 +1,16 @@
 return {
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
+		branch = "main", -- master is archived and breaks on Neovim 0.12+
+		lazy = false, -- main branch does not support lazy-loading
 		build = ":TSUpdate",
-		main = "nvim-treesitter.configs", -- Sets main module to use for opts.
-
-		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-		opts = {
+		config = function()
+			-- Parsers to keep installed. Run :TSUpdate after upgrading the plugin.
 			-- Swift requires `tree-sitter generate` (tree-sitter CLI + Xcode tooling) and
 			-- is only used by the macOS-only xcodebuild plugin, so request it on macOS
 			-- only. This keeps Linux from invoking `generate` (which breaks against
 			-- tree-sitter CLI >= 0.25, where `--no-bindings` was removed).
-			ensure_installed = vim.list_extend({
+			local ensure_installed = vim.list_extend({
 				"bash",
 				"c",
 				"diff",
@@ -22,28 +22,25 @@ return {
 				"query",
 				"vim",
 				"vimdoc",
-			}, vim.fn.has("mac") == 1 and { "swift" } or {}),
+			}, vim.fn.has("mac") == 1 and { "swift" } or {})
+			require("nvim-treesitter").install(ensure_installed)
 
-			-- Autoinstall languages that are not installed
-			auto_install = true,
-			highlight = {
-				enable = true,
-				--disable = { "swift" }, -- Disable Tree-sitter highlighting for Swift
-
-				-- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-				-- If you are experiencing wierd indenting issues, add the language to the
-				-- list of additional_vim_regex_highlighting and disabled languages for indent.
-				additional_vim_regex_highlighting = { "ruby" },
-			},
-			indent = { enable = true, disable = { "ruby" } },
-		},
-
-		-- There are additional nvim-treesitter modules that you can use to interact
-		-- with nvim-treesitter. You should go explore a few and see what interests you:
-		--
-		--  - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-		--  - Show your current context: https://github.com/nvim/treesitter/nvim-treesitter-context
-		--  - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+			-- On the main branch, highlighting/indent are enabled per-buffer
+			-- via the built-in treesitter API instead of a `highlight`/`indent`
+			-- opts table.
+			vim.api.nvim_create_autocmd("FileType", {
+				desc = "Enable treesitter highlighting and indentation",
+				callback = function(ev)
+					-- ruby relies on vim's regex indent; let everything else use
+					-- treesitter where a parser is available.
+					if pcall(vim.treesitter.start) then
+						if vim.bo[ev.buf].filetype ~= "ruby" then
+							vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+						end
+					end
+				end,
+			})
+		end,
 	},
 }
 -- vim: ts=2 sts=2 sw=2 et
