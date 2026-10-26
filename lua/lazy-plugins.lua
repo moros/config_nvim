@@ -42,7 +42,7 @@ require("lazy").setup({
 	require("themoros.plugins.search_replace"),
 	require("themoros.plugins.markdown"),
 	require("themoros.plugins.render-markdown"),
-	require("themoros.plugins.github_copilot"),
+	--require("themoros.plugins.github_copilot"),
 	require("themoros.plugins.split-term"),
 	require("themoros.plugins.io.nio"),
 	require("themoros.plugins.debug.xcodebuild"),
